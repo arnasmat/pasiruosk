@@ -3,19 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>pasiruošk</title>
+  <title>72h Pack-Up</title>
   <style>
     body {
       font-family: system-ui, sans-serif;
       max-width: 700px;
-      margin: 3rem auto;
+      margin: 2rem auto;
       padding: 0 1.5rem;
-      line-height: 1.7;
+      line-height: 1.6;
       color: #222;
     }
-    a { color: #0a58ca; }
-    h1 { font-size: 1.4rem; margin-top: 3rem; }
-    hr { border: none; border-top: 1px solid #ddd; margin: 2.5rem 0; }
+    h1 { font-size: 1.4rem; }
     #hud { display: flex; gap: 2rem; font-weight: 600; margin-bottom: 0.5rem; }
     #arena {
       position: relative;
@@ -54,6 +52,9 @@
       background: #0a58ca; color: #fff; cursor: pointer;
     }
     button:hover { background: #0846a3; }
+    a { color: #0a58ca; }
+    .checklist { text-align: left; font-size: .9rem; max-width: 420px; }
+    #msg { height: 1.5rem; font-weight: 600; }
     .pop {
       position: absolute;
       font-weight: 700;
@@ -80,20 +81,14 @@
 </script>
 </head>
 <body>
-  <p>Tu turbūt ieškai <a href="https://pasiruosk.lt">pasiruosk.lt</a>.</p>
-  <p>
-    Vilnius nusipirko <strong>pasiruosk.lt</strong>, o ne <strong>pasiruošk.lt</strong>.
-    Galvojau būtų juokinga nusipirkt pasiruošk.lt.
-  </p>
-
-  <hr>
-
-  <p>Aš irgi turiu žaidimuką, tik ne tokį gerą. rimtai, eikit išbandyt tikrąjį <a href="https://pasiruosk.lt">pasiruosk.lt</a>.</p>
+  <h1>🎒 72h Pack-Up</h1>
+  <p>Surink daiktus išvykimo krepšiui pagal <a href="https://lt72.lt/isvykimo-krepsys-5/">lt72.lt</a> rekomendacijas. Spausk rekomenduojamus (+10), venk netinkamų (−15), nepraleisk gerų (−5). Laikas: 45 s.</p>
   <div id="hud">
     <span>⏱ <span id="time">45</span>s</span>
     <span>Taškai: <span id="score">0</span></span>
     <span>Rekordas: <span id="best">0</span></span>
   </div>
+  <div id="msg">&nbsp;</div>
   <div id="arena">
     <div id="overlay">
       <h2>Pasiruošęs?</h2>
@@ -125,6 +120,7 @@
   const timeEl = document.getElementById('time');
   const scoreEl = document.getElementById('score');
   const bestEl = document.getElementById('best');
+  const msgEl = document.getElementById('msg');
   let score, timeLeft, running, spawnTimer, tickTimer, best = +localStorage.getItem('packup_best') || 0;
   bestEl.textContent = best;
 
@@ -173,6 +169,14 @@
       el.remove();
     }, 2600);
     spawnTimer = setTimeout(spawn, rand(350, 800));
+  }
+
+  let msgT;
+  function flash(text, color) {
+    msgEl.textContent = text;
+    msgEl.style.color = color;
+    clearTimeout(msgT);
+    msgT = setTimeout(() => { msgEl.innerHTML = '&nbsp;'; }, 700);
   }
 
   function pop(el, text, color) {

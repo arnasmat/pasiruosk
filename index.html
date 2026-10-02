@@ -71,12 +71,16 @@
 <script data-goatcounter="https://arnasmat.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 <script>
-    var t = setInterval(function() {
-        if (window.goatcounter && window.goatcounter.visit_count) {
-            clearInterval(t)
-            window.goatcounter.visit_count({append: 'body', type: 'html'})
-        }
-    }, 100)
+    fetch('https://arnasmat.goatcounter.com/counter/' + encodeURIComponent(location.pathname) + '.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (!d) return;
+        const el = document.createElement('div');
+        el.style.cssText = 'margin-top:3rem;font-size:.85rem;color:#888;';
+        el.textContent = '👁 peržiūros: ' + d.count;
+        document.body.appendChild(el);
+      })
+      .catch(() => {});
 </script>
 </head>
 <body>
